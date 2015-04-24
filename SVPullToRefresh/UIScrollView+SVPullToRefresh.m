@@ -27,7 +27,7 @@ static CGFloat const SVPullToRefreshViewHeight = 60;
 
 @property (nonatomic, copy) void (^pullToRefreshActionHandler)(void);
 
-@property (nonatomic, strong) SVPullToRefreshArrow *arrow;
+@property (nonatomic, strong) UIView *arrow;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, strong, readwrite) UILabel *titleLabel;
 @property (nonatomic, strong, readwrite) UILabel *subtitleLabel;
@@ -440,11 +440,12 @@ static char UIScrollViewPullToRefreshView;
 
 #pragma mark - Getters
 
-- (SVPullToRefreshArrow *)arrow {
+- (UIView *)arrow {
     if(!_arrow) {
-		_arrow = [[SVPullToRefreshArrow alloc]initWithFrame:CGRectMake(0, self.bounds.size.height-54, 22, 48)];
-        _arrow.backgroundColor = [UIColor clearColor];
-		[self addSubview:_arrow];
+        UIImageView *view = [[UIImageView alloc] initWithFrame:CGRectMake((self.bounds.size.width - 13.0) / 2.0, self.bounds.size.height - 54.0 + 14.0, 13.0, 19.0)];
+        view.image = [UIImage imageNamed:@"arrow.png"];
+        _arrow = view;
+        [self addSubview:_arrow];
     }
     return _arrow;
 }
@@ -495,10 +496,6 @@ static char UIScrollViewPullToRefreshView;
     return dateFormatter;
 }
 
-- (UIColor *)arrowColor {
-	return self.arrow.arrowColor; // pass through
-}
-
 - (UIColor *)textColor {
     return self.titleLabel.textColor;
 }
@@ -512,11 +509,6 @@ static char UIScrollViewPullToRefreshView;
 }
 
 #pragma mark - Setters
-
-- (void)setArrowColor:(UIColor *)newArrowColor {
-	self.arrow.arrowColor = newArrowColor; // pass through
-	[self.arrow setNeedsDisplay];
-}
 
 - (void)setTitle:(NSString *)title forState:(SVPullToRefreshState)state {
     if(!title)
